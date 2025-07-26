@@ -13,7 +13,7 @@ const app = express();
 app.use(morgan("dev"));
 
 // BetterAuth middleware: mount before json middleware
-app.all(`/api/${VERSION}/auth/*`, toNodeHandler(auth));
+app.all(`/api/auth/*`, toNodeHandler(auth));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
