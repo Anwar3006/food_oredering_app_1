@@ -7,10 +7,16 @@ import { NODE_ENV, PORT, VERSION } from "./config/env.js";
 import { db, testDb } from "./db/dbClient.js";
 import logger from "./config/logger.js";
 import { auth } from "./lib/auth.js";
+import { scheduleJob } from "./utils/cronjob.js";
 
 const app = express();
 
-app.use(morgan("dev"));
+if (NODE_ENV === "development") {
+  app.use(morgan("dev"));
+} else {
+  // Production: use combined format or disable entirely
+  app.use(morgan("combined"));
+}
 
 // BetterAuth middleware: mount before json middleware
 app.all(`/api/auth/*`, toNodeHandler(auth));
@@ -18,6 +24,9 @@ app.all(`/api/auth/*`, toNodeHandler(auth));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Trigger cronjob only in production
+if (NODE_ENV === "production") scheduleJob.start();
 
 //Routes
 
@@ -29,7 +38,7 @@ app.get(`/api/${VERSION}/health`, (req, res) => {
 // Errorhandler Middleware
 
 // Listen
-app.listen(PORT, async () => {
+app.listen(PORT || process.env.PORT, async () => {
   try {
     await testDb();
     logger.info("Database connected successfully");
@@ -37,5 +46,12 @@ app.listen(PORT, async () => {
     logger.error("Database connection failed: ", error);
     process.exit(1);
   }
-  logger.info(`Server running in (${NODE_ENV}) on port ${PORT}`);
+
+  if (NODE_ENV === "development") {
+    logger.info(
+      `Server running in (${NODE_ENV}) on port ${PORT || process.env.PORT}`
+    );
+  } else {
+    logger.info("Application ready🚀");
+  }
 });
