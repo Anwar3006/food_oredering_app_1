@@ -1,9 +1,18 @@
-import { decimal, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  decimal,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
+
 import { categoryTable } from "./category.schema.js";
 
 export const menuItemTable = pgTable("menu_item", {
   id: uuid().primaryKey().defaultRandom(),
-  category_id: varchar("category_id").references(() => categoryTable.id, {
+  category_id: uuid("category_id").references(() => categoryTable.id, {
     onDelete: "cascade",
   }),
   name: varchar("name", { length: 100 }).notNull(),

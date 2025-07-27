@@ -6,7 +6,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import { customizationTypeEnum } from "./enums.schema";
+import { customizationTypeEnum } from "./enums.schema.js";
 
 export const customizationTable = pgTable("customization", {
   id: uuid().primaryKey().defaultRandom(),
