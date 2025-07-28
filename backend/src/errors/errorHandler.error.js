@@ -15,7 +15,7 @@ const sendErrorDev = (err, res) => {
 //Send message to client in production
 const sendErrorProd = (err, res) => {
   if (err.isOperational) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
     });
