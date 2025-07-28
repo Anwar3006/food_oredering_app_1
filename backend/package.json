@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon ./src/server.js",
-    "start": "NODE_ENV=production node ./src/server.js"
+    "start": "NODE_ENV=production node ./src/server.js",
+    "db:seed": "node ./src/db/seeder.js"
   },
   "dependencies": {
     "@better-auth/expo": "^1.3.4",

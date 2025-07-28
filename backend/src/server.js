@@ -8,6 +8,8 @@ import { db, testDb } from "./db/dbClient.js";
 import logger from "./config/logger.js";
 import { auth } from "./lib/auth.js";
 import { scheduleJob } from "./utils/cronjob.js";
+import { globalErrorHandler, notFound } from "./errors/errorHandler.error.js";
+import menuItemRouter from "./routes/menuItem.route.js";
 
 const app = express();
 
@@ -29,6 +31,7 @@ app.use(cookieParser());
 if (NODE_ENV === "production") scheduleJob.start();
 
 //Routes
+app.use(`/api/${VERSION}/menu-items`, menuItemRouter);
 
 // Healthcheck
 app.get(`/api/${VERSION}/health`, (req, res) => {
@@ -36,6 +39,8 @@ app.get(`/api/${VERSION}/health`, (req, res) => {
 });
 
 // Errorhandler Middleware
+app.use("*", notFound);
+app.use(globalErrorHandler);
 
 // Listen
 app.listen(PORT || process.env.PORT, async () => {

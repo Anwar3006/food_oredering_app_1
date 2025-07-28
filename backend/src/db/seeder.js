@@ -1,47 +1,53 @@
-import { db } from "./db/dbClient.js";
-import {
-  categoryTable,
-  customizationTable,
-  menuItemTable,
-  menuCustomizationTable,
-} from "./schema/index.js";
+import { db } from "./dbClient.js";
+
+import { categoryTable } from "./schema/category.schema.js";
+import { customizationTable } from "./schema/customization.schema.js";
+import { menuItemTable } from "./schema/menu_item.schema.js";
+import { menuCustomizationTable } from "./schema/menu_customization.schema.js";
 
 // Categories data
 export const categoriesData = [
   {
     name: "Burgers",
     description: "Juicy beef and chicken burgers with fresh toppings",
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/022/911/694/non_2x/cute-cartoon-burger-icon-free-png.png",
   },
   {
     name: "Pizza",
     description: "Hand-tossed pizzas with premium ingredients",
-    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/038/776/933/non_2x/ai-generated-of-pizza-against-transparent-background-free-png.png",
   },
   {
     name: "Fried Chicken",
     description: "Crispy fried chicken pieces and wings",
-    image: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/046/543/481/non_2x/crispy-fried-chicken-in-bucket-free-png.png",
   },
   {
     name: "Sandwiches",
     description: "Fresh sandwiches and wraps made to order",
-    image: "https://images.unsplash.com/photo-1553909489-cd47e0ef937f?w=400",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/042/654/478/non_2x/ai-generated-grilled-cheese-sandwich-with-melting-cheese-free-png.png",
   },
   {
     name: "Sides",
     description: "Delicious sides and appetizers",
-    image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/065/276/692/non_2x/creamy-mashed-potatoes-with-chives-and-pepper-for-comfort-food-free-png.png",
   },
   {
     name: "Beverages",
     description: "Refreshing drinks and shakes",
-    image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/056/814/702/non_2x/reing-iced-drinks-with-lemon-and-mint-look-cool-and-free-png.png",
   },
   {
     name: "Desserts",
     description: "Sweet treats and ice cream",
-    image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400",
+    image:
+      "https://static.vecteezy.com/system/resources/previews/041/329/757/non_2x/ai-generated-cold-coffee-dessert-cream-chocolate-biscuits-isolated-on-transparent-background-generative-ai-free-png.png",
   },
 ];
 
@@ -95,194 +101,370 @@ export const customizationsData = [
   { name: "Extra Hot", price: 50, type: "spice" },
 ];
 
-// Menu items data
+// Menu items data with integer prices (in cents)
 export const menuItemsData = [
   // Burgers
   {
-    name: "Classic Beef Burger",
-    description:
-      "Juicy beef patty with lettuce, tomato, onion and our special sauce",
+    name: "Classic Cheeseburger",
+    description: "Beef patty, cheese, lettuce, tomato",
     rating: 4.5,
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400",
-    price: 899,
-    calories: 650,
-    protein: 35,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/067/827/202/non_2x/gourmet-beef-burger-with-thick-flame-grilled-patty-and-fresh-toppings-free-png.png",
+    price: 2599, // $25.99
+    calories: 550,
+    protein: 25,
     category_name: "Burgers",
+    customizations: [
+      "Extra Cheese",
+      "French Fries",
+      "Ketchup",
+      "Onions",
+      "Bacon",
+      "Medium",
+      "Sesame Bun",
+    ],
   },
   {
-    name: "Chicken Deluxe",
-    description:
-      "Grilled chicken breast with avocado, bacon and ranch dressing",
+    name: "BBQ Bacon Burger",
+    description: "Beef patty with BBQ sauce, bacon, and crispy onions",
     rating: 4.7,
-    image: "https://images.unsplash.com/photo-1606755456206-1f6ac2d83671?w=400",
-    price: 1099,
-    calories: 580,
-    protein: 40,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/041/456/331/large_2x/ai-generated-delicious-bacon-cheeseburger-with-fresh-vegetables-on-transparent-background-free-png.png",
+    price: 2899, // $28.99
+    calories: 680,
+    protein: 32,
     category_name: "Burgers",
+    customizations: [
+      "Bacon",
+      "BBQ Sauce",
+      "French Fries",
+      "Onions",
+      "Large",
+      "Brioche Bun",
+      "Extra Cheese",
+    ],
+  },
+  {
+    name: "Chicken Deluxe Burger",
+    description: "Grilled chicken breast with avocado and mayo",
+    rating: 4.6,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/057/448/446/non_2x/a-delicious-chicken-breast-burger-topped-with-fresh-vegetables-on-a-toasted-sesame-seed-bun-burger-with-chicken-breast-free-png.png",
+    price: 2699, // $26.99
+    calories: 520,
+    protein: 35,
+    category_name: "Burgers",
+    customizations: [
+      "Avocado",
+      "Mayo",
+      "Lettuce",
+      "Tomato",
+      "Medium",
+      "Whole Wheat Bun",
+      "French Fries",
+    ],
   },
   {
     name: "Double Cheeseburger",
-    description:
-      "Two beef patties with double cheese, pickles and special sauce",
-    rating: 4.6,
-    image: "https://images.unsplash.com/photo-1551615593-502f644c91bd?w=400",
-    price: 1299,
+    description: "Two beef patties with double cheese and pickles",
+    rating: 4.8,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/058/269/747/non_2x/juicy-double-cheeseburger-with-lettuce-tomato-pickles-and-sesame-bun-free-png.png",
+    price: 3299, // $32.99
     calories: 890,
     protein: 55,
     category_name: "Burgers",
+    customizations: [
+      "Extra Cheese",
+      "Pickles",
+      "Large",
+      "Sesame Bun",
+      "Onion Rings",
+      "BBQ Sauce",
+    ],
   },
 
   // Pizza
   {
+    name: "Pepperoni Pizza",
+    description: "Loaded with cheese and pepperoni slices",
+    rating: 4.7,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/044/771/686/non_2x/a-tasty-pepperoni-pizza-free-png.png",
+    price: 3099, // $30.99
+    calories: 700,
+    protein: 30,
+    category_name: "Pizza",
+    customizations: [
+      "Extra Cheese",
+      "Thin Crust",
+      "Medium",
+      "BBQ Sauce",
+      "Mushrooms",
+    ],
+  },
+  {
     name: "Margherita Pizza",
     description: "Classic pizza with tomato sauce, mozzarella and fresh basil",
     rating: 4.4,
-    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400",
-    price: 1199,
-    calories: 720,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/027/144/426/large_2x/margherita-pizza-ai-generated-free-png.png",
+    price: 2899, // $28.99
+    calories: 620,
+    protein: 25,
+    category_name: "Pizza",
+    customizations: [
+      "Extra Cheese",
+      "Thin Crust",
+      "Small",
+      "Garlic Sauce",
+      "Tomato",
+    ],
+  },
+  {
+    name: "Supreme Pizza",
+    description: "Loaded with pepperoni, mushrooms, bell peppers and sausage",
+    rating: 4.8,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/041/720/207/large_2x/ai-generated-delicious-pizza-with-pepperoni-mushrooms-and-cheese-on-transparent-background-free-png.png",
+    price: 3499, // $34.99
+    calories: 850,
+    protein: 38,
+    category_name: "Pizza",
+    customizations: [
+      "Extra Cheese",
+      "Thick Crust",
+      "Large",
+      "Mushrooms",
+      "Hot Sauce",
+    ],
+  },
+  {
+    name: "Hawaiian Pizza",
+    description: "Ham and pineapple with mozzarella cheese",
+    rating: 4.2,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/036/498/065/non_2x/ai-generated-delicious-hawaiian-pizza-on-transparent-background-free-png.png",
+    price: 2999, // $29.99
+    calories: 680,
     protein: 28,
     category_name: "Pizza",
-  },
-  {
-    name: "Pepperoni Supreme",
-    description:
-      "Loaded with pepperoni, mushrooms, bell peppers and extra cheese",
-    rating: 4.8,
-    image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400",
-    price: 1499,
-    calories: 850,
-    protein: 35,
-    category_name: "Pizza",
-  },
-  {
-    name: "BBQ Chicken Pizza",
-    description: "Grilled chicken with BBQ sauce, red onions and cilantro",
-    rating: 4.5,
-    image: "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=400",
-    price: 1399,
-    calories: 780,
-    protein: 42,
-    category_name: "Pizza",
+    customizations: ["Extra Cheese", "Thin Crust", "Medium", "Ranch", "Bacon"],
   },
 
   // Fried Chicken
   {
     name: "Original Fried Chicken",
-    description: "8-piece bucket of our signature crispy fried chicken",
+    description: "8-piece bucket of crispy fried chicken",
     rating: 4.6,
-    image: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400",
-    price: 1899,
-    calories: 1200,
-    protein: 80,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/053/486/293/non_2x/crispy-fried-chicken-leg-drumstick-free-png.png",
+    price: 2499, // $24.99
+    calories: 980,
+    protein: 65,
     category_name: "Fried Chicken",
+    customizations: [
+      "Mild",
+      "Coleslaw",
+      "Mashed Potatoes",
+      "Garlic Sauce",
+      "Large",
+    ],
   },
   {
-    name: "Spicy Wings",
-    description: "12 buffalo wings with your choice of spice level",
+    name: "Spicy Buffalo Wings",
+    description: "12 buffalo wings with spicy sauce",
     rating: 4.7,
-    image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=400",
-    price: 1299,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/058/173/685/non_2x/delicious-chicken-wings-coated-in-spicy-sauce-with-fresh-herbs-on-a-transparent-background-tasty-chicken-wings-on-isolated-on-background-free-png.png",
+    price: 1999, // $19.99
     calories: 720,
     protein: 45,
     category_name: "Fried Chicken",
+    customizations: ["Hot", "Ranch", "Extra Hot", "Medium", "French Fries"],
   },
   {
     name: "Chicken Tenders",
-    description: "5 pieces of hand-breaded chicken tenders with dipping sauce",
+    description: "5 pieces of hand-breaded chicken tenders",
     rating: 4.5,
-    image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=400",
-    price: 999,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/068/187/010/non_2x/golden-crispy-fried-chicken-tenders-appetizer-isolated-on-transparent-background-free-png.png",
+    price: 1699, // $16.99
     calories: 540,
     protein: 38,
     category_name: "Fried Chicken",
+    customizations: ["BBQ Sauce", "Ranch", "French Fries", "Mild", "Medium"],
+  },
+  {
+    name: "Nashville Hot Chicken",
+    description: "Crispy chicken with Nashville hot seasoning",
+    rating: 4.8,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/066/632/613/non_2x/crispy-fried-chicken-tenders-free-png.png",
+    price: 2299, // $22.99
+    calories: 680,
+    protein: 42,
+    category_name: "Fried Chicken",
+    customizations: ["Extra Hot", "Coleslaw", "Hot Sauce", "Large", "Pickles"],
   },
 
   // Sandwiches
   {
     name: "Club Sandwich",
-    description: "Triple-decker with turkey, bacon, lettuce, tomato and mayo",
+    description: "Triple-decker with turkey, bacon, lettuce, tomato",
     rating: 4.3,
-    image: "https://images.unsplash.com/photo-1553909489-cd47e0ef937f?w=400",
-    price: 799,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/059/374/399/non_2x/savory-club-sandwich-with-turkey-bacon-lettuce-and-tomato-isolated-on-transparent-background-free-png.png",
+    price: 1899, // $18.99
     calories: 620,
     protein: 32,
     category_name: "Sandwiches",
+    customizations: [
+      "Bacon",
+      "Mayo",
+      "Lettuce",
+      "Tomato",
+      "White Bun",
+      "French Fries",
+    ],
   },
   {
     name: "Grilled Chicken Wrap",
-    description:
-      "Grilled chicken with vegetables and ranch wrapped in tortilla",
+    description: "Grilled chicken with vegetables in tortilla wrap",
     rating: 4.4,
-    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
-    price: 899,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/057/448/497/non_2x/fresh-burritos-with-toppings-on-an-oval-plate-ideal-for-lunch-or-casual-dining-burrito-on-oval-transparent-plate-top-view-isolated-transparent-background-free-png.png",
+    price: 1599, // $15.99
     calories: 480,
     protein: 35,
     category_name: "Sandwiches",
+    customizations: [
+      "Ranch",
+      "Lettuce",
+      "Tomato",
+      "Avocado",
+      "Medium",
+      "French Fries",
+    ],
+  },
+  {
+    name: "Philly Cheesesteak",
+    description: "Sliced steak with peppers, onions and cheese",
+    rating: 4.6,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/050/277/775/non_2x/grilled-philly-cheesesteak-sandwich-with-onions-and-peppers-free-png.png",
+    price: 2199, // $21.99
+    calories: 720,
+    protein: 38,
+    category_name: "Sandwiches",
+    customizations: [
+      "Extra Cheese",
+      "Onions",
+      "Mushrooms",
+      "Large",
+      "French Fries",
+      "Mayo",
+    ],
   },
 
   // Sides
   {
     name: "Loaded Fries",
-    description: "Crispy fries topped with cheese, bacon bits and green onions",
+    description: "Crispy fries with cheese, bacon and green onions",
     rating: 4.2,
-    image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400",
-    price: 599,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/057/754/918/non_2x/french-fries-in-a-red-container-with-cheese-and-onions-free-png.png",
+    price: 1299, // $12.99
     calories: 450,
     protein: 12,
     category_name: "Sides",
+    customizations: ["Extra Cheese", "Bacon", "Ranch", "Medium", "BBQ Sauce"],
   },
   {
     name: "Onion Rings",
-    description: "Golden crispy onion rings with tangy dipping sauce",
+    description: "Golden crispy onion rings with dipping sauce",
     rating: 4.1,
-    image: "https://images.unsplash.com/photo-1639024471283-03518883512d?w=400",
-    price: 499,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/060/119/815/non_2x/delicious-golden-brown-onion-rings-crispy-and-flavorful-free-png.png",
+    price: 999, // $9.99
     calories: 380,
     protein: 8,
     category_name: "Sides",
+    customizations: ["Ranch", "BBQ Sauce", "Medium", "Ketchup"],
   },
   {
     name: "Mozzarella Sticks",
-    description: "6 pieces of breaded mozzarella with marinara sauce",
+    description: "6 pieces of breaded mozzarella with marinara",
     rating: 4.3,
-    image: "https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?w=400",
-    price: 699,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/060/119/814/non_2x/delicious-crispy-cheese-sticks-with-marinara-sauce-free-png.png",
+    price: 1199, // $11.99
     calories: 520,
     protein: 24,
     category_name: "Sides",
+    customizations: ["Garlic Sauce", "Ranch", "Medium", "Hot Sauce"],
+  },
+  {
+    name: "Buffalo Cauliflower",
+    description: "Crispy cauliflower wings with buffalo sauce",
+    rating: 4.0,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/059/020/038/large_2x/crispy-golden-buffalo-wings-served-a-side-of-creamy-ranch-dip-for-a-spicy-delicious-snack-free-png.png",
+    price: 1099, // $10.99
+    calories: 280,
+    protein: 6,
+    category_name: "Sides",
+    customizations: ["Hot Sauce", "Ranch", "Medium", "Extra Hot"],
   },
 
   // Beverages
   {
     name: "Chocolate Milkshake",
-    description:
-      "Thick and creamy chocolate milkshake topped with whipped cream",
+    description: "Thick chocolate milkshake with whipped cream",
     rating: 4.5,
-    image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400",
-    price: 499,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/057/174/949/non_2x/indulge-in-a-delicious-chocolate-milkshake-topped-with-whipped-cream-and-chocolate-shavings-on-a-bright-transparent-background-chocolate-milkshake-with-whipped-cream-on-transparent-background-free-png.png",
+    price: 899, // $8.99
     calories: 380,
     protein: 8,
     category_name: "Beverages",
+    customizations: ["Large", "Medium", "Small"],
   },
   {
     name: "Fresh Lemonade",
     description: "Freshly squeezed lemonade with mint",
     rating: 4.2,
-    image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400",
-    price: 299,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/068/186/345/non_2x/refreshing-glass-jar-drink-with-lemon-slices-mint-leaves-and-ice-cubes-with-a-striped-straw-isolated-on-transparent-background-free-png.png",
+    price: 599, // $5.99
     calories: 120,
     protein: 0,
     category_name: "Beverages",
+    customizations: ["Large", "Medium", "Small"],
   },
   {
     name: "Iced Coffee",
-    description: "Cold brew coffee with your choice of milk and sweetener",
+    description: "Cold brew coffee with milk and sweetener",
     rating: 4.4,
-    image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=400",
-    price: 399,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/027/735/650/non_2x/an-iced-coffee-with-whipped-cream-and-a-straw-free-png.png",
+    price: 699, // $6.99
     calories: 80,
     protein: 2,
     category_name: "Beverages",
+    customizations: ["Large", "Medium", "Small"],
+  },
+  {
+    name: "Strawberry Smoothie",
+    description: "Fresh strawberry smoothie with yogurt",
+    rating: 4.3,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/059/051/487/non_2x/delicious-strawberry-smoothie-in-a-glass-with-fresh-strawberries-free-png.png",
+    price: 799, // $7.99
+    calories: 240,
+    protein: 6,
+    category_name: "Beverages",
+    customizations: ["Large", "Medium", "Small"],
   },
 
   // Desserts
@@ -290,21 +472,49 @@ export const menuItemsData = [
     name: "Chocolate Brownie",
     description: "Warm chocolate brownie with vanilla ice cream",
     rating: 4.6,
-    image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400",
-    price: 599,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/057/672/960/non_2x/chocolate-brownie-topped-with-strawberry-ice-cream-free-png.png",
+    price: 999, // $9.99
     calories: 420,
     protein: 6,
     category_name: "Desserts",
+    customizations: ["Medium", "Large"],
   },
   {
     name: "Apple Pie",
-    description: "Classic apple pie with cinnamon and caramel sauce",
+    description: "Classic apple pie with cinnamon and caramel",
     rating: 4.3,
-    image: "https://images.unsplash.com/photo-1621743478914-cc8a86d7e7b5?w=400",
-    price: 499,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/068/209/021/non_2x/slice-of-apple-pie-with-whipped-cream-on-transparent-background-free-png.png",
+    price: 899, // $8.99
     calories: 350,
     protein: 4,
     category_name: "Desserts",
+    customizations: ["Medium", "Large"],
+  },
+  {
+    name: "Cheesecake",
+    description: "Creamy New York style cheesecake with berry topping",
+    rating: 4.7,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/065/900/564/non_2x/slice-of-decadent-chocolate-cake-rich-frosting-a-tempting-on-transparent-background-free-png.png",
+    price: 1099, // $10.99
+    calories: 450,
+    protein: 8,
+    category_name: "Desserts",
+    customizations: ["Medium", "Large"],
+  },
+  {
+    name: "Ice Cream Sundae",
+    description: "Vanilla ice cream with chocolate sauce and cherry",
+    rating: 4.4,
+    image_url:
+      "https://static.vecteezy.com/system/resources/previews/066/892/444/large_2x/delicious-ice-cream-sundae-with-chocolate-sauce-and-cherry-free-png.png",
+    price: 799, // $7.99
+    calories: 320,
+    protein: 5,
+    category_name: "Desserts",
+    customizations: ["Medium", "Large", "Small"],
   },
 ];
 
@@ -335,7 +545,7 @@ export async function seedDatabase() {
       const category = insertedCategories.find(
         (cat) => cat.name === item.category_name
       );
-      const { category_name, ...itemData } = item;
+      const { category_name, customizations, ...itemData } = item;
       return {
         ...itemData,
         category_id: category.id,
@@ -348,109 +558,25 @@ export async function seedDatabase() {
       .returning();
     console.log(`✅ Inserted ${insertedMenuItems.length} menu items`);
 
-    // 4. Seed menu customizations (linking menu items with their available customizations)
+    // 4. Seed menu customizations using the predefined customizations arrays
     console.log("🔗 Seeding menu customizations...");
     const menuCustomizations = [];
 
-    // Add relevant customizations to each menu item
-    insertedMenuItems.forEach((menuItem) => {
-      const category = insertedCategories.find(
-        (cat) => cat.id === menuItem.category_id
-      );
-
-      // Add size options to most items
-      if (!["Beverages", "Desserts"].includes(category.name)) {
-        const sizeCustomizations = insertedCustomizations.filter(
-          (c) => c.type === "size"
-        );
-        sizeCustomizations.forEach((size) => {
-          menuCustomizations.push({
-            menu_item_id: menuItem.id,
-            customization_id: size.id,
-          });
+    // Use the customizations array from each menu item
+    insertedMenuItems.forEach((menuItem, index) => {
+      const originalItem = menuItemsData[index];
+      if (originalItem.customizations) {
+        originalItem.customizations.forEach((customizationName) => {
+          const customization = insertedCustomizations.find(
+            (c) => c.name === customizationName
+          );
+          if (customization) {
+            menuCustomizations.push({
+              menu_item_id: menuItem.id,
+              customization_id: customization.id,
+            });
+          }
         });
-      }
-
-      // Add specific customizations based on category
-      switch (category.name) {
-        case "Burgers":
-          // Add toppings, bread, and sauce options
-          const burgerCustomizations = insertedCustomizations.filter((c) =>
-            ["topping", "bread", "sauce", "side"].includes(c.type)
-          );
-          burgerCustomizations.forEach((custom) => {
-            menuCustomizations.push({
-              menu_item_id: menuItem.id,
-              customization_id: custom.id,
-            });
-          });
-          break;
-
-        case "Pizza":
-          // Add crust, toppings, and size options
-          const pizzaCustomizations = insertedCustomizations.filter((c) =>
-            ["crust", "topping", "sauce"].includes(c.type)
-          );
-          pizzaCustomizations.forEach((custom) => {
-            menuCustomizations.push({
-              menu_item_id: menuItem.id,
-              customization_id: custom.id,
-            });
-          });
-          break;
-
-        case "Fried Chicken":
-          // Add spice levels and sides
-          const chickenCustomizations = insertedCustomizations.filter((c) =>
-            ["spice", "sauce", "side"].includes(c.type)
-          );
-          chickenCustomizations.forEach((custom) => {
-            menuCustomizations.push({
-              menu_item_id: menuItem.id,
-              customization_id: custom.id,
-            });
-          });
-          break;
-
-        case "Sandwiches":
-          // Add bread, toppings, and sauces
-          const sandwichCustomizations = insertedCustomizations.filter((c) =>
-            ["bread", "topping", "sauce", "side"].includes(c.type)
-          );
-          sandwichCustomizations.forEach((custom) => {
-            menuCustomizations.push({
-              menu_item_id: menuItem.id,
-              customization_id: custom.id,
-            });
-          });
-          break;
-
-        case "Sides":
-          // Add sauce options
-          const sideCustomizations = insertedCustomizations.filter(
-            (c) => c.type === "sauce"
-          );
-          sideCustomizations.forEach((custom) => {
-            menuCustomizations.push({
-              menu_item_id: menuItem.id,
-              customization_id: custom.id,
-            });
-          });
-          break;
-
-        case "Beverages":
-          // Add size options for beverages
-          const beverageSizes = insertedCustomizations.filter(
-            (c) =>
-              c.type === "size" && ["Small", "Medium", "Large"].includes(c.name)
-          );
-          beverageSizes.forEach((size) => {
-            menuCustomizations.push({
-              menu_item_id: menuItem.id,
-              customization_id: size.id,
-            });
-          });
-          break;
       }
     });
 
