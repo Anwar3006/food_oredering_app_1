@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { asc, desc, eq, ilike, or } from "drizzle-orm";
 
 import { menuItemTable } from "../db/schema.js";
 import { db } from "../db/dbClient.js";
@@ -49,6 +49,52 @@ export const MenuItemRepository = {
 
     return {
       data: paginatedItem,
+      meta: {
+        currentPage: page,
+        totalPages,
+        totalItems,
+        perPage: limit,
+        hasNextPage,
+        hasPrevPage,
+      },
+    };
+  },
+
+  getMenuItemByTextSearch: async (query, options) => {
+    const { page, limit, sortBy, sortOrder } = options;
+    const offset = (page - 1) * limit;
+    const sorting = sortOrder === "desc" ? desc : asc;
+
+    const searchTerm = `%${query}%`;
+    const [basicSearchItems, totalItems] = await Promise.all([
+      db
+        .select()
+        .from(menuItemTable)
+        .where(
+          or(
+            ilike(menuItemTable.name, searchTerm),
+            ilike(menuItemTable.description, searchTerm)
+          )
+        )
+        .limit(limit)
+        .offset(offset)
+        .orderBy(sorting(menuItemTable[sortBy])),
+
+      db.$count(
+        menuItemTable,
+        or(
+          ilike(menuItemTable.name, searchTerm),
+          ilike(menuItemTable.description, searchTerm)
+        )
+      ),
+    ]);
+
+    const totalPages = Math.ceil(totalItems / limit);
+    const hasNextPage = page < totalPages;
+    const hasPrevPage = page > 1;
+
+    return {
+      data: basicSearchItems,
       meta: {
         currentPage: page,
         totalPages,

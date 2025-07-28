@@ -13,6 +13,25 @@ export const MenuItemController = {
     return res.status(200).json({ success: true, data: item });
   }),
 
+  getMenuItemByTextSearch: catchAsync(async (req, res, next) => {
+    const { q } = req.query;
+    if (!q || !q.trim()) return next(new AppError("Query not provided", 400));
+
+    const options = {
+      page: 1,
+      limit: 8,
+      sortBy: "createdAt",
+      sortOrder: "desc",
+    };
+
+    const query = q.toLowerCase();
+
+    const items = await MenuItemService.getMenuItemByTextSearch(query, options);
+    if (!items) return next(new AppError("No items found", 404));
+
+    res.status(200).json({ success: true, ...items });
+  }),
+
   getAllMenuItem: catchAsync(async (req, res, next) => {
     const {
       page = 1,
