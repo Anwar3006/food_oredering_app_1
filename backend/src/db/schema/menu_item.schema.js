@@ -15,7 +15,7 @@ export const menuItemTable = pgTable(
   "menu_item",
   {
     id: uuid().primaryKey().defaultRandom(),
-    category_id: uuid("category_id").references(() => categoryTable.id, {
+    category: varchar("category").references(() => categoryTable.name, {
       onDelete: "cascade",
     }),
     name: varchar("name", { length: 100 }).notNull(),

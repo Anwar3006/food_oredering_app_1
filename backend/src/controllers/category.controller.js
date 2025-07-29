@@ -34,4 +34,35 @@ export const CategoryController = {
     const category = await CategoryService.getCategoryById(id);
     res.status(200).json({ success: true, data: category });
   }),
+
+  getMenuItemsByCategoryAndTextSearch: catchAsync(async (req, res, next) => {
+    const {
+      category,
+      query,
+      page = 1,
+      limit = 8,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = req.query;
+
+    const options = {
+      page: parseInt(page),
+      limit: Math.min(parseInt(limit), 8),
+      sortBy,
+      sortOrder,
+    };
+
+    if (!query.trim()) return next(new AppError("Query not provided", 400));
+    if (page < 1 || limit < 1 || limit > 100)
+      return next(new AppError("Invalid pagination parameters", 400));
+
+    const items = await CategoryService.getMenuItemsByCategoryAndTextSearch(
+      query,
+      category,
+      options
+    );
+    if (!items) return next(new AppError("No items found", 404));
+
+    res.status(200).json({ success: true, ...items });
+  }),
 };

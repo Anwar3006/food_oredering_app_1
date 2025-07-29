@@ -39,7 +39,7 @@ export const customizationToMenuItemRelations = relations(
 export const menuItemRelations = relations(menuItemTable, ({ many, one }) => ({
   customizationToMenuItem: many(menuCustomizationTable),
   category: one(categoryTable, {
-    fields: [categoryTable.id],
-    references: [menuItemTable.category_id],
+    fields: [categoryTable.name],
+    references: [menuItemTable.category],
   }),
 }));

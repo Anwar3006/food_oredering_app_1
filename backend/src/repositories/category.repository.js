@@ -1,8 +1,9 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, or } from "drizzle-orm";
 
 import { db } from "../db/dbClient.js";
 import { categoryTable } from "../db/schema/category.schema.js";
 import { AppError } from "../errors/AppError.error.js";
+import { menuItemTable } from "../db/schema.js";
 
 export const CategoryRepository = {
   getAllCategory: async (options) => {
@@ -58,5 +59,58 @@ export const CategoryRepository = {
     if (!category) throw new AppError(`Category with id: ${id} not found`, 404);
 
     return category;
+  },
+
+  getMenuItemsByCategoryAndTextSearch: async (query, category, options) => {
+    const { page, limit, sortBy, sortOrder } = options;
+    const offset = (page - 1) * limit;
+    const sorting = sortOrder === "desc" ? desc : asc;
+
+    const searchConditions = [];
+
+    const searchTerm = `%${query}%`;
+    if (query && query.trim()) {
+      searchConditions.push(
+        or(
+          ilike(menuItemTable.name, searchTerm),
+          ilike(menuItemTable.description, searchTerm)
+        )
+      );
+    }
+
+    if (category && category !== "all") {
+      searchConditions.push(eq(menuItemTable.category, category));
+    }
+
+    const whereClause =
+      searchConditions.length > 0 ? and(...searchConditions) : undefined;
+
+    const [basicSearchItems, totalItems] = await Promise.all([
+      db
+        .select()
+        .from(menuItemTable)
+        .where(whereClause)
+        .limit(limit)
+        .offset(offset)
+        .orderBy(sorting(menuItemTable[sortBy])),
+
+      db.$count(menuItemTable, whereClause),
+    ]);
+
+    const totalPages = Math.ceil(totalItems / limit);
+    const hasNextPage = page < totalPages;
+    const hasPrevPage = page > 1;
+
+    return {
+      data: basicSearchItems,
+      meta: {
+        currentPage: page,
+        totalPages,
+        totalItems,
+        perPage: limit,
+        hasNextPage,
+        hasPrevPage,
+      },
+    };
   },
 };

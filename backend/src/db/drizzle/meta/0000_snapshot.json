@@ -1,5 +1,5 @@
 {
-  "id": "26e9c70d-5069-40cf-b6e5-badfb086cdf9",
+  "id": "4f381634-2f74-4a15-a6fc-30c7223d308a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -306,8 +306,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "category_id": {
-          "name": "category_id",
+        "category": {
+          "name": "category",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
@@ -369,17 +369,48 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "name_idx": {
+          "name": "name_idx",
+          "columns": [
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "description_idx": {
+          "name": "description_idx",
+          "columns": [
+            {
+              "expression": "description",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
-        "menu_item_category_id_category_id_fk": {
-          "name": "menu_item_category_id_category_id_fk",
+        "menu_item_category_category_name_fk": {
+          "name": "menu_item_category_category_name_fk",
           "tableFrom": "menu_item",
           "tableTo": "category",
           "columnsFrom": [
-            "category_id"
+            "category"
           ],
           "columnsTo": [
-            "id"
+            "name"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"

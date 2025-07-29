@@ -11,4 +11,13 @@ export const CategoryService = {
     const result = await CategoryRepository.getCategoryById(id);
     return result;
   },
+
+  getMenuItemsByCategoryAndTextSearch: async (query, category, options) => {
+    const items = await CategoryRepository.getMenuItemsByCategoryAndTextSearch(
+      query,
+      category,
+      options
+    );
+    return items;
+  },
 };

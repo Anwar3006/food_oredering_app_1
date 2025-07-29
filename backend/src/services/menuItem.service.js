@@ -13,13 +13,4 @@ export const MenuItemService = {
     const items = await MenuItemRepository.getAllMenuItem(option);
     return items;
   },
-
-  getMenuItemsByCategoryAndTextSearch: async (query, categoryId, options) => {
-    const items = await MenuItemRepository.getMenuItemsByCategoryAndTextSearch(
-      query,
-      categoryId,
-      options
-    );
-    return items;
-  },
 };

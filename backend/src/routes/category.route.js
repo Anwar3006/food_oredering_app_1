@@ -4,6 +4,10 @@ import { CategoryController } from "../controllers/category.controller.js";
 const categoryRouter = Router();
 
 categoryRouter.get("/", CategoryController.getAllCategory);
+categoryRouter.get(
+  "/menu-items",
+  CategoryController.getMenuItemsByCategoryAndTextSearch
+);
 categoryRouter.get("/:id", CategoryController.getCategoryById);
 
 export default categoryRouter;

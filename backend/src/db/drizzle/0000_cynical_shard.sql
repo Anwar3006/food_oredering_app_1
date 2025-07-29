@@ -1,4 +1,3 @@
--- Drop all tables first (due to foreign key constraints)
 DROP TABLE IF EXISTS "account" CASCADE;
 DROP TABLE IF EXISTS "session" CASCADE;
 DROP TABLE IF EXISTS "verification" CASCADE;
@@ -57,7 +56,7 @@ CREATE TABLE "menu_customization" (
 --> statement-breakpoint
 CREATE TABLE "menu_item" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"category_id" uuid,
+	"category" varchar,
 	"name" varchar(100) NOT NULL,
 	"description" varchar(200) NOT NULL,
 	"rating" numeric(2, 1) NOT NULL,
@@ -104,5 +103,7 @@ CREATE TABLE "verification" (
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "menu_customization" ADD CONSTRAINT "menu_customization_customization_id_customization_id_fk" FOREIGN KEY ("customization_id") REFERENCES "public"."customization"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "menu_customization" ADD CONSTRAINT "menu_customization_menu_item_id_menu_item_id_fk" FOREIGN KEY ("menu_item_id") REFERENCES "public"."menu_item"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "menu_item" ADD CONSTRAINT "menu_item_category_id_category_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."category"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+ALTER TABLE "menu_item" ADD CONSTRAINT "menu_item_category_category_name_fk" FOREIGN KEY ("category") REFERENCES "public"."category"("name") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "name_idx" ON "menu_item" USING btree ("name");--> statement-breakpoint
+CREATE INDEX "description_idx" ON "menu_item" USING btree ("description");

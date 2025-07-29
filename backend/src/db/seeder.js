@@ -521,6 +521,11 @@ export const menuItemsData = [
 // Function to seed all data
 export async function seedDatabase() {
   try {
+    console.log("Deleting existing data...");
+    await db.delete(categoryTable);
+    await db.delete(customizationTable);
+    await db.delete(menuItemTable);
+
     console.log("🌱 Starting database seeding...");
 
     // 1. Seed categories
@@ -528,6 +533,7 @@ export async function seedDatabase() {
     const insertedCategories = await db
       .insert(categoryTable)
       .values(categoriesData)
+      .onConflictDoNothing()
       .returning();
     console.log(`✅ Inserted ${insertedCategories.length} categories`);
 
@@ -536,6 +542,7 @@ export async function seedDatabase() {
     const insertedCustomizations = await db
       .insert(customizationTable)
       .values(customizationsData)
+      .onConflictDoNothing()
       .returning();
     console.log(`✅ Inserted ${insertedCustomizations.length} customizations`);
 
@@ -546,9 +553,10 @@ export async function seedDatabase() {
         (cat) => cat.name === item.category_name
       );
       const { category_name, customizations, ...itemData } = item;
+
       return {
         ...itemData,
-        category_id: category.id,
+        category: category.name,
       };
     });
 
