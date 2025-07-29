@@ -6,7 +6,7 @@ const categoryRouter = Router();
 categoryRouter.get("/", CategoryController.getAllCategory);
 categoryRouter.get(
   "/menu-items",
-  CategoryController.getMenuItemsByCategoryAndTextSearch
+  CategoryController.getMenuItemsByCategoryOrTextSearch
 );
 categoryRouter.get("/:id", CategoryController.getCategoryById);
 

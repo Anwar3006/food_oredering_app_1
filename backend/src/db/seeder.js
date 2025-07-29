@@ -129,7 +129,7 @@ export const menuItemsData = [
     description: "Beef patty with BBQ sauce, bacon, and crispy onions",
     rating: 4.7,
     image_url:
-      "https://static.vecteezy.com/system/resources/previews/041/456/331/large_2x/ai-generated-delicious-bacon-cheeseburger-with-fresh-vegetables-on-transparent-background-free-png.png",
+      "https://static.vecteezy.com/system/resources/previews/058/264/637/non_2x/juicy-delicious-sesame-seed-burger-with-melted-cheese-lettuce-and-tomato-free-png.png",
     price: 2899, // $28.99
     calories: 680,
     protein: 32,
@@ -208,7 +208,7 @@ export const menuItemsData = [
     description: "Classic pizza with tomato sauce, mozzarella and fresh basil",
     rating: 4.4,
     image_url:
-      "https://static.vecteezy.com/system/resources/previews/027/144/426/large_2x/margherita-pizza-ai-generated-free-png.png",
+      "https://static.vecteezy.com/system/resources/previews/051/087/249/non_2x/a-pizza-with-pepperoni-mushrooms-and-cheese-free-png.png",
     price: 2899, // $28.99
     calories: 620,
     protein: 25,

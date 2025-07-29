@@ -12,8 +12,8 @@ export const CategoryService = {
     return result;
   },
 
-  getMenuItemsByCategoryAndTextSearch: async (query, category, options) => {
-    const items = await CategoryRepository.getMenuItemsByCategoryAndTextSearch(
+  getMenuItemsByCategoryOrTextSearch: async (query, category, options) => {
+    const items = await CategoryRepository.getMenuItemsByCategoryOrTextSearch(
       query,
       category,
       options

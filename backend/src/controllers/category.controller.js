@@ -35,7 +35,7 @@ export const CategoryController = {
     res.status(200).json({ success: true, data: category });
   }),
 
-  getMenuItemsByCategoryAndTextSearch: catchAsync(async (req, res, next) => {
+  getMenuItemsByCategoryOrTextSearch: catchAsync(async (req, res, next) => {
     const {
       category,
       query,
@@ -52,11 +52,18 @@ export const CategoryController = {
       sortOrder,
     };
 
-    if (!query.trim()) return next(new AppError("Query not provided", 400));
+    if (query) {
+      const cleanedQuery = query.replace(/^["']|["']$/g, "").trim();
+      console.log("cleanedQuery: ", cleanedQuery);
+      if (!cleanedQuery) {
+        return next(new AppError("Query not provided", 400));
+      }
+    }
+
     if (page < 1 || limit < 1 || limit > 100)
       return next(new AppError("Invalid pagination parameters", 400));
 
-    const items = await CategoryService.getMenuItemsByCategoryAndTextSearch(
+    const items = await CategoryService.getMenuItemsByCategoryOrTextSearch(
       query,
       category,
       options

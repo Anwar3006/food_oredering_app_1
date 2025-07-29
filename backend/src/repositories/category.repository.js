@@ -61,24 +61,40 @@ export const CategoryRepository = {
     return category;
   },
 
-  getMenuItemsByCategoryAndTextSearch: async (query, category, options) => {
+  getMenuItemsByCategoryOrTextSearch: async (query, category, options) => {
     const { page, limit, sortBy, sortOrder } = options;
     const offset = (page - 1) * limit;
     const sorting = sortOrder === "desc" ? desc : asc;
 
     const searchConditions = [];
+    const queryActual = query && query.trim();
 
-    const searchTerm = `%${query}%`;
-    if (query && query.trim()) {
+    const searchTerm = `%${queryActual}%`;
+    console.log("category: " + category + " query: " + queryActual);
+    if (queryActual && category && category !== "all") {
       searchConditions.push(
         or(
           ilike(menuItemTable.name, searchTerm),
           ilike(menuItemTable.description, searchTerm)
         )
       );
-    }
-
-    if (category && category !== "all") {
+      searchConditions.push(eq(menuItemTable.category, category));
+    } else if (queryActual && !category) {
+      console.log("category: " + category + " query: " + query);
+      searchConditions.push(
+        or(
+          ilike(menuItemTable.name, searchTerm),
+          ilike(menuItemTable.description, searchTerm)
+        )
+      );
+    } else if (queryActual && category && category !== "all") {
+      console.log(
+        "category: " +
+          category +
+          " query: " +
+          queryActual +
+          " only category passed"
+      );
       searchConditions.push(eq(menuItemTable.category, category));
     }
 
