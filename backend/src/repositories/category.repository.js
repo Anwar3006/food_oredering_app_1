@@ -66,30 +66,35 @@ export const CategoryRepository = {
     const offset = (page - 1) * limit;
     const sorting = sortOrder === "desc" ? desc : asc;
 
-    const searchConditions = [];
+    let whereClause;
 
-    const searchTerm = `%${query}%`;
-    if (query && category && category !== "all") {
-      searchConditions.push(
-        or(
-          ilike(menuItemTable.name, searchTerm),
-          ilike(menuItemTable.description, searchTerm)
-        )
-      );
-      searchConditions.push(eq(menuItemTable.category, category));
-    } else if (query && !category) {
-      searchConditions.push(
-        or(
-          ilike(menuItemTable.name, searchTerm),
-          ilike(menuItemTable.description, searchTerm)
-        )
-      );
-    } else if (!query && category && category !== "all") {
-      searchConditions.push(eq(menuItemTable.category, category));
+    // Scenario 1: No query, no category OR category is "all" -> fetch all items
+    if (!query && (!category || category === "all")) {
+      whereClause = undefined; // No filtering
     }
-
-    const whereClause =
-      searchConditions.length > 0 ? and(...searchConditions) : undefined;
+    // Scenario 2: No query, specific category -> filter by category only
+    else if (!query && category && category !== "all") {
+      whereClause = eq(menuItemTable.category, category);
+    }
+    // Scenario 3: Query exists, no category OR category is "all" -> search by text only
+    else if (query && (!category || category === "all")) {
+      const searchTerm = `%${query}%`;
+      whereClause = or(
+        ilike(menuItemTable.name, searchTerm),
+        ilike(menuItemTable.description, searchTerm)
+      );
+    }
+    // Scenario 4: Query exists, specific category -> search by text AND filter by category
+    else if (query && category && category !== "all") {
+      const searchTerm = `%${query}%`;
+      whereClause = and(
+        or(
+          ilike(menuItemTable.name, searchTerm),
+          ilike(menuItemTable.description, searchTerm)
+        ),
+        eq(menuItemTable.category, category)
+      );
+    }
 
     const [basicSearchItems, totalItems] = await Promise.all([
       db
