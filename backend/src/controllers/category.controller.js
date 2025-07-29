@@ -54,7 +54,6 @@ export const CategoryController = {
 
     if (query) {
       const cleanedQuery = query.replace(/^["']|["']$/g, "").trim();
-      console.log("cleanedQuery: ", cleanedQuery);
       if (!cleanedQuery) {
         return next(new AppError("Query not provided", 400));
       }

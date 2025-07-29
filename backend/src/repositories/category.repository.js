@@ -67,11 +67,9 @@ export const CategoryRepository = {
     const sorting = sortOrder === "desc" ? desc : asc;
 
     const searchConditions = [];
-    const queryActual = query && query.trim();
 
-    const searchTerm = `%${queryActual}%`;
-    console.log("category: " + category + " query: " + queryActual);
-    if (queryActual && category && category !== "all") {
+    const searchTerm = `%${query}%`;
+    if (query && category && category !== "all") {
       searchConditions.push(
         or(
           ilike(menuItemTable.name, searchTerm),
@@ -79,22 +77,14 @@ export const CategoryRepository = {
         )
       );
       searchConditions.push(eq(menuItemTable.category, category));
-    } else if (queryActual && !category) {
-      console.log("category: " + category + " query: " + query);
+    } else if (query && !category) {
       searchConditions.push(
         or(
           ilike(menuItemTable.name, searchTerm),
           ilike(menuItemTable.description, searchTerm)
         )
       );
-    } else if (queryActual && category && category !== "all") {
-      console.log(
-        "category: " +
-          category +
-          " query: " +
-          queryActual +
-          " only category passed"
-      );
+    } else if (!query && category && category !== "all") {
       searchConditions.push(eq(menuItemTable.category, category));
     }
 
