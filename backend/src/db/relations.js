@@ -4,6 +4,8 @@ import { categoryTable } from "./schema/category.schema.js";
 import { menuItemTable } from "./schema/menu_item.schema.js";
 import { customizationTable } from "./schema/customization.schema.js";
 import { menuCustomizationTable } from "./schema/menu_customization.schema.js";
+import { address } from "./schema/address.schema.js";
+import { user } from "./schema/auth-schema.js";
 
 //////////////// Category and MenuItem Relationship
 export const categoryToMenuItemRelation = relations(
@@ -42,4 +44,17 @@ export const menuItemRelations = relations(menuItemTable, ({ many, one }) => ({
     fields: [categoryTable.name],
     references: [menuItemTable.category],
   }),
+}));
+
+///////////////////// User - Address Relation
+// Address belongs to one User
+export const addressRelations = relations(address, ({ one }) => ({
+  user: one(user, {
+    fields: [address.userId],
+    references: [user.id],
+  }),
+}));
+// User has many Address
+export const userRelations = relations(user, ({ many }) => ({
+  addresses: many(address),
 }));

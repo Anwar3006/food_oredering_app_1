@@ -11,6 +11,7 @@ import { scheduleJob } from "./utils/cronjob.js";
 import { globalErrorHandler, notFound } from "./errors/errorHandler.error.js";
 import menuItemRouter from "./routes/menuItem.route.js";
 import categoryRouter from "./routes/category.route.js";
+import addressRouter from "./routes/address.route.js";
 
 const app = express();
 
@@ -34,6 +35,7 @@ if (NODE_ENV === "production") scheduleJob.start();
 //Routes
 app.use(`/api/${VERSION}/menu-items`, menuItemRouter);
 app.use(`/api/${VERSION}/categories`, categoryRouter);
+app.use(`/api/${VERSION}/addresses`, addressRouter);
 
 // Healthcheck
 app.get(`/api/${VERSION}/health`, (req, res) => {
