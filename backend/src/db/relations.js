@@ -6,6 +6,12 @@ import { customizationTable } from "./schema/customization.schema.js";
 import { menuCustomizationTable } from "./schema/menu_customization.schema.js";
 import { address } from "./schema/address.schema.js";
 import { user } from "./schema/auth-schema.js";
+import {
+  orderTable,
+  orderItemTable,
+  orderPaymentTable,
+  orderStatusHistoryTable,
+} from "./schema/order.schema.js";
 
 //////////////// Category and MenuItem Relationship
 export const categoryToMenuItemRelation = relations(
@@ -54,7 +60,77 @@ export const addressRelations = relations(address, ({ one }) => ({
     references: [user.id],
   }),
 }));
-// User has many Address
+// User has many Address and Orders
 export const userRelations = relations(user, ({ many }) => ({
   addresses: many(address),
+  orders: many(orderTable),
+}));
+
+///////////////////// Order Relations
+// Order belongs to User and Address, has many OrderItems, Payments, and StatusHistory
+export const orderRelations = relations(orderTable, ({ one, many }) => ({
+  user: one(user, {
+    fields: [orderTable.userId],
+    references: [user.id],
+  }),
+  deliveryAddress: one(address, {
+    fields: [orderTable.deliveryAddressId],
+    references: [address.id],
+  }),
+  orderItems: many(orderItemTable),
+  payments: many(orderPaymentTable),
+  statusHistory: many(orderStatusHistoryTable),
+}));
+
+// OrderItem belongs to Order and MenuItem
+export const orderItemRelations = relations(orderItemTable, ({ one }) => ({
+  order: one(orderTable, {
+    fields: [orderItemTable.orderId],
+    references: [orderTable.id],
+  }),
+  menuItem: one(menuItemTable, {
+    fields: [orderItemTable.menuItemId],
+    references: [menuItemTable.id],
+  }),
+}));
+
+// OrderPayment belongs to Order
+export const orderPaymentRelations = relations(orderPaymentTable, ({ one }) => ({
+  order: one(orderTable, {
+    fields: [orderPaymentTable.orderId],
+    references: [orderTable.id],
+  }),
+}));
+
+// OrderStatusHistory belongs to Order
+export const orderStatusHistoryRelations = relations(
+  orderStatusHistoryTable,
+  ({ one }) => ({
+    order: one(orderTable, {
+      fields: [orderStatusHistoryTable.orderId],
+      references: [orderTable.id],
+    }),
+  })
+);
+
+// Update MenuItem to include OrderItems relationship
+export const menuItemToOrderItemRelations = relations(
+  menuItemTable,
+  ({ many, one }) => ({
+    customizationToMenuItem: many(menuCustomizationTable),
+    orderItems: many(orderItemTable),
+    category: one(categoryTable, {
+      fields: [categoryTable.name],
+      references: [menuItemTable.category],
+    }),
+  })
+);
+
+// Update Address to include Orders relationship
+export const addressToOrderRelations = relations(address, ({ one, many }) => ({
+  user: one(user, {
+    fields: [address.userId],
+    references: [user.id],
+  }),
+  orders: many(orderTable),
 }));

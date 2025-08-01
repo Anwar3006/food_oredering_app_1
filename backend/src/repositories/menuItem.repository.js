@@ -1,16 +1,49 @@
 import { and, asc, desc, eq, ilike, or } from "drizzle-orm";
 
-import { menuItemTable } from "../db/schema.js";
+import {
+  customizationTable,
+  menuCustomizationTable,
+  menuItemTable,
+} from "../db/schema.js";
 import { db } from "../db/dbClient.js";
 import { AppError } from "../errors/AppError.error.js";
 
 export const MenuItemRepository = {
   getMenuItemById: async (id) => {
-    const item = await db
+    // Get the menu item first
+    const menuItemResult = await db
       .select()
       .from(menuItemTable)
-      .where(eq(menuItemTable.id, id));
-    return item[0] || [];
+      .where(eq(menuItemTable.id, id))
+      .limit(1);
+
+    if (!menuItemResult || menuItemResult.length === 0) {
+      return null;
+    }
+
+    const menuItem = menuItemResult[0];
+
+    // Get customizations for this menu item
+    const customizations = await db
+      .select({
+        id: customizationTable.id,
+        name: customizationTable.name,
+        price: customizationTable.price,
+        type: customizationTable.type,
+        createdAt: customizationTable.createdAt,
+        updatedAt: customizationTable.updatedAt,
+      })
+      .from(customizationTable)
+      .innerJoin(
+        menuCustomizationTable,
+        eq(customizationTable.id, menuCustomizationTable.customization_id)
+      )
+      .where(eq(menuCustomizationTable.menu_item_id, id));
+
+    return {
+      ...menuItem,
+      customizations,
+    };
   },
 
   getAllMenuItem: async ({

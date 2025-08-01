@@ -4,6 +4,9 @@ export {
   customizationTypeEnum,
   regionEnum,
   addressTypeEnum,
+  orderStatusEnum,
+  paymentMethodEnum,
+  paymentStatusEnum,
 } from "./schema/enums.schema.js";
 
 export { user, account, session, verification } from "./schema/auth-schema.js";
@@ -12,5 +15,11 @@ export { customizationTable } from "./schema/customization.schema.js";
 export { menuItemTable } from "./schema/menu_item.schema.js";
 export { menuCustomizationTable } from "./schema/menu_customization.schema.js";
 export { address } from "./schema/address.schema.js";
+export {
+  orderTable,
+  orderItemTable,
+  orderPaymentTable,
+  orderStatusHistoryTable,
+} from "./schema/order.schema.js";
 
 export * as relations from "./relations.js";
