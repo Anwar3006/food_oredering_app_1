@@ -10,7 +10,7 @@ export const MenuItemRepository = {
       .select()
       .from(menuItemTable)
       .where(eq(menuItemTable.id, id));
-    return item || [];
+    return item[0] || [];
   },
 
   getAllMenuItem: async ({
