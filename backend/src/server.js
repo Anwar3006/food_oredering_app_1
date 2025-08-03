@@ -12,6 +12,7 @@ import { globalErrorHandler, notFound } from "./errors/errorHandler.error.js";
 import menuItemRouter from "./routes/menuItem.route.js";
 import categoryRouter from "./routes/category.route.js";
 import addressRouter from "./routes/address.route.js";
+import orderRouter from "./routes/order.route.js";
 
 const app = express();
 
@@ -36,6 +37,7 @@ if (NODE_ENV === "production") scheduleJob.start();
 app.use(`/api/${VERSION}/menu-items`, menuItemRouter);
 app.use(`/api/${VERSION}/categories`, categoryRouter);
 app.use(`/api/${VERSION}/addresses`, addressRouter);
+app.use(`/api/${VERSION}/orders`, orderRouter);
 
 // Healthcheck
 app.get(`/api/${VERSION}/health`, (req, res) => {

@@ -14,7 +14,8 @@ export const AddressRepository = {
       .select()
       .from(address)
       .where(eq(address.userId, user_id));
-    return addressForUser[0] || null;
+    console.log("Addr: ", JSON.stringify(addressForUser, null, 2));
+    return addressForUser || null;
   },
 
   updateAddress: async (id, data) => {
