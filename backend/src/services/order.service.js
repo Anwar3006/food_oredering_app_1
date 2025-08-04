@@ -36,29 +36,25 @@ export const OrderService = {
 
     const orderNumber = generateOrderNumber(await OrderRepository.orderCount());
 
-    // Calculate customization totals for all items
-    const customizationTotal = items.reduce((sum, item) => {
-      const itemCustomizationTotal =
-        item.customizations?.reduce((total, cus) => {
-          return total + (cus.customization?.price || 0) * (cus.quantity || 1);
-        }, 0) || 0;
-      return sum + itemCustomizationTotal * item.quantity;
-    }, 0);
-
     //get user address
     // const addresses = await AddressRepository.getAllAddressForUser(userId);
+
+    const totalAmountPayable =
+      totalPrice + deliveryFee + taxAmount - discountAmount;
 
     const orderData = {
       userId,
       orderNumber,
       deliveryAddressId: 2,
-      subtotal: totalPrice + customizationTotal,
+      subtotal: totalPrice,
       deliveryFee: deliveryFee || 0,
       taxAmount: taxAmount || 0,
       discountAmount: discountAmount || 0,
-      totalAmount: calculateTotalOrderAmount(order, customizationTotal),
+      totalAmount: totalAmountPayable,
       specialInstructions: specialInstructions || "",
     };
+
+    console.log("Order Data: ", JSON.stringify(orderData, null, 2));
 
     const orderItemArray = items.map((item) => {
       const customizationSubtotal =
@@ -69,7 +65,6 @@ export const OrderService = {
         }, 0) || 0;
 
       //item subtotal
-      console.log("customizationSubtotal: ", customizationSubtotal);
       const itemSubtotal = (item.price + customizationSubtotal) * item.quantity;
 
       return {
@@ -86,8 +81,17 @@ export const OrderService = {
       orderData,
       orderItemArray
     );
-    console.log("order: ", order);
 
-    return orderReturned;
+    return {
+      orderNumber: orderReturned.order.orderNumber,
+      status: orderReturned.order.status,
+      subtotal: orderReturned.order.subtotal,
+      deliveryFee: orderReturned.order.deliveryFee,
+      taxAmount: orderReturned.order.taxAmount,
+      discountAmount: orderReturned.order.discountAmount,
+
+      totalAmount: orderReturned.order.totalAmount,
+      totalItems: totalItems,
+    };
   },
 };
