@@ -46,11 +46,29 @@ export const OrderRepository = {
 
   updateOrder: async (id, data) => {
     try {
+      // Prepare update data
+      const updateData = typeof data === "string" ? { status: data } : data;
+
+      // Always update the updated_at timestamp
+      updateData.updated_at = new Date();
+
+      // Perform the update
       const [updatedOrder] = await db
         .update(orderTable)
-        .set(typeof data === "string" ? { status: data } : data)
+        .set(updateData)
         .where(eq(orderTable.id, id))
         .returning();
+
+      // Check if order was found and updated
+      if (!updatedOrder) {
+        throw new Error(`Order with ID ${id} not found`);
+      }
+
+      logger.info(`Order ${id} updated successfully`, {
+        orderId: id,
+        updatedFields: Object.keys(updateData),
+      });
+
       return updatedOrder;
     } catch (error) {
       logger.error("Error updating order:", error);
