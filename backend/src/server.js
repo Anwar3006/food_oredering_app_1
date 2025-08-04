@@ -28,6 +28,11 @@ if (NODE_ENV === "development") {
 // BetterAuth middleware: mount before json middleware
 app.all(`/api/auth/*`, toNodeHandler(auth));
 
+app.use(
+  `/api/${VERSION}/webhooks/stripe`,
+  express.raw({ type: "application/json" })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -41,11 +46,6 @@ app.use(`/api/${VERSION}/menu-items`, menuItemRouter);
 app.use(`/api/${VERSION}/categories`, categoryRouter);
 app.use(`/api/${VERSION}/addresses`, addressRouter);
 app.use(`/api/${VERSION}/orders`, orderRouter);
-
-app.use(
-  `/api/${VERSION}/webhooks/stripe`,
-  express.raw({ type: "application/json" })
-);
 app.use(`/api/${VERSION}/payments`, paymentRouter);
 
 // Healthcheck
