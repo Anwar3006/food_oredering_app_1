@@ -13,6 +13,7 @@ import menuItemRouter from "./routes/menuItem.route.js";
 import categoryRouter from "./routes/category.route.js";
 import addressRouter from "./routes/address.route.js";
 import orderRouter from "./routes/order.route.js";
+import paymentRouter from "./routes/payment.route.js";
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use(`/api/${VERSION}/menu-items`, menuItemRouter);
 app.use(`/api/${VERSION}/categories`, categoryRouter);
 app.use(`/api/${VERSION}/addresses`, addressRouter);
 app.use(`/api/${VERSION}/orders`, orderRouter);
+app.use(`/api/${VERSION}/payments`, paymentRouter);
 
 // Healthcheck
 app.get(`/api/${VERSION}/health`, (req, res) => {
