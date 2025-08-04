@@ -29,7 +29,7 @@ if (NODE_ENV === "development") {
 app.all(`/api/auth/*`, toNodeHandler(auth));
 
 app.use(
-  `/api/${VERSION}/webhooks/stripe`,
+  `/api/${VERSION}/payments/webhooks`,
   express.raw({ type: "application/json" })
 );
 
