@@ -14,6 +14,7 @@ import categoryRouter from "./routes/category.route.js";
 import addressRouter from "./routes/address.route.js";
 import orderRouter from "./routes/order.route.js";
 import paymentRouter from "./routes/payment.route.js";
+import userRouter from "./routes/user.route.js";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use(cookieParser());
 if (NODE_ENV === "production") scheduleJob.start();
 
 //Routes
+app.use(`/api/${VERSION}/users`, userRouter);
 app.use(`/api/${VERSION}/menu-items`, menuItemRouter);
 app.use(`/api/${VERSION}/categories`, categoryRouter);
 app.use(`/api/${VERSION}/addresses`, addressRouter);
