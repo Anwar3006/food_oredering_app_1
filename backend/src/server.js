@@ -41,6 +41,11 @@ app.use(`/api/${VERSION}/menu-items`, menuItemRouter);
 app.use(`/api/${VERSION}/categories`, categoryRouter);
 app.use(`/api/${VERSION}/addresses`, addressRouter);
 app.use(`/api/${VERSION}/orders`, orderRouter);
+
+app.use(
+  `/api/${VERSION}/webhooks/stripe`,
+  express.raw({ type: "application/json" })
+);
 app.use(`/api/${VERSION}/payments`, paymentRouter);
 
 // Healthcheck

@@ -1,13 +1,9 @@
-import express from "express";
+import Router from "express";
 import { PaymentController } from "../controllers/payment.controller.js";
 
-const paymentRouter = express.Router();
+const paymentRouter = Router();
 
 paymentRouter.post("/payment-sheet", PaymentController.createPaymentSheet);
-paymentRouter.post(
-  "/webhooks",
-  express.raw({ type: "application/json" }),
-  PaymentController.stripeWebhooks
-);
+paymentRouter.post("/webhooks", PaymentController.stripeWebhooks);
 
 export default paymentRouter;
