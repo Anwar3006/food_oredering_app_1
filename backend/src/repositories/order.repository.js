@@ -1,3 +1,4 @@
+import logger from "../config/logger.js";
 import { db } from "../db/dbClient.js";
 import { orderItemTable, orderTable } from "../db/schema.js";
 
@@ -41,5 +42,19 @@ export const OrderRepository = {
   orderCount: async () => {
     const count = await db.$count(orderTable);
     return count;
+  },
+
+  updateOrder: async (id, data) => {
+    try {
+      const [updatedOrder] = await db
+        .update(orderTable)
+        .set(typeof data === "string" ? { status: data } : data)
+        .where(eq(orderTable.id, id))
+        .returning();
+      return updatedOrder;
+    } catch (error) {
+      logger.error("Error updating order:", error);
+      throw new Error("Failed to update order", { cause: error });
+    }
   },
 };

@@ -94,4 +94,8 @@ export const OrderService = {
       totalItems: totalItems,
     };
   },
+
+  updateOrder: async (id, data) => {
+    return await OrderRepository.updateOrder(id, data);
+  },
 };

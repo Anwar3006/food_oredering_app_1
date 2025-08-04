@@ -10,4 +10,5 @@ export const {
   SERVER_URL,
   STRIPE_SECRET_KEY,
   STRIPE_PUBLISHABLE_KEY,
+  STRIPE_WEBHOOK_SECRET,
 } = process.env;
