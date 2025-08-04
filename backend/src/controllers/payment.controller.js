@@ -9,9 +9,9 @@ export const PaymentController = {
   initStripe: () => new Stripe(STRIPE_SECRET_KEY),
 
   createPaymentSheet: catchAsync(async (req, res, next) => {
-    const { amount, currency, userId, orderId } = req.body;
+    const { amount, currency, userId, orderNumber } = req.body;
 
-    if (!amount || !userId || !orderId) {
+    if (!amount || !userId || !orderNumber) {
       return next(new AppError("All fields are required", 400));
     }
     if (amount && amount <= 0) {
@@ -54,7 +54,7 @@ export const PaymentController = {
       customer: customer.id,
       currency: currency.toLowerCase(),
       metadata: {
-        orderId: orderId,
+        orderId: orderNumber,
         userId: userId,
       },
     };
