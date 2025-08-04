@@ -9,7 +9,7 @@ orderRouter.post("/", OrderController.createOrder);
 // orderRouter.get("/:id", OrderController.getOrderById);
 
 // Only Admin can update and delete order
-// orderRouter.put("/:id", OrderController.updateOrder);
+orderRouter.put("/", OrderController.updateOrder);
 // orderRouter.delete("/:id", OrderController.deleteOrder);
 
 export default orderRouter;

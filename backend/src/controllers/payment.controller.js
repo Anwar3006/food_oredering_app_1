@@ -102,7 +102,7 @@ export const PaymentController = {
         const paymentIntent = event.data.object;
         logger.info(`Payment succeeded for ${paymentIntent.id}`);
         // Update order status in database
-        await OrderService.updateOrderStatus(
+        await OrderService.updateOrder(
           paymentIntent.metadata.orderNumber,
           "confirmed"
         );

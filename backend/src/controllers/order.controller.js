@@ -41,4 +41,16 @@ export const OrderController = {
       data: newOrder,
     });
   }),
+
+  updateOrder: catchAsync(async (req, res, next) => {
+    const data = req.body;
+    const updatedOrder = await OrderService.updateOrder(data.orderNumber, data);
+    if (!updatedOrder) {
+      return next(new AppError("Order not updated", 400));
+    }
+    res.status(200).json({
+      status: "success",
+      data: updatedOrder,
+    });
+  }),
 };

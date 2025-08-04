@@ -1,3 +1,4 @@
+import { eq, sql } from "drizzle-orm";
 import logger from "../config/logger.js";
 import { db } from "../db/dbClient.js";
 import { orderItemTable, orderTable } from "../db/schema.js";
@@ -44,34 +45,28 @@ export const OrderRepository = {
     return count;
   },
 
-  updateOrder: async (id, data) => {
+  updateOrder: async (orderNumber, data) => {
     try {
       // Prepare update data
       const updateData = typeof data === "string" ? { status: data } : data;
 
-      // Always update the updated_at timestamp
-      updateData.updated_at = new Date();
-
       // Perform the update
       const [updatedOrder] = await db
         .update(orderTable)
-        .set(updateData)
-        .where(eq(orderTable.id, id))
+        .set({ ...updateData, updatedAt: sql`now()` })
+        .where(eq(orderTable.orderNumber, orderNumber))
         .returning();
 
       // Check if order was found and updated
       if (!updatedOrder) {
-        throw new Error(`Order with ID ${id} not found`);
+        throw new Error(`Order with number ${orderNumber} not found`);
       }
 
-      logger.info(`Order ${id} updated successfully`, {
-        orderId: id,
-        updatedFields: Object.keys(updateData),
-      });
+      logger.info(`Order: ${orderNumber} updated successfully`);
 
       return updatedOrder;
     } catch (error) {
-      logger.error("Error updating order:", error);
+      logger.error("Error updating order: " + error.message);
       throw new Error("Failed to update order", { cause: error });
     }
   },
